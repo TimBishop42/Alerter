@@ -1,7 +1,6 @@
 package com.crypto.Alerter.controller;
 
 
-import com.crypto.Alerter.client.BitrexClient;
 import com.crypto.Alerter.model.response.BitrexMarketResponse;
 import com.crypto.Alerter.model.response.BitrexMarketTickerResponse;
 import com.crypto.Alerter.service.ArbitrageService;
@@ -22,17 +21,23 @@ public class Controller {
     @Autowired
     private ArbitrageService arbitrageService;
 
-    @GetMapping(value = "/market/{symbol}")
+    @GetMapping(value = "/bitrex/market/{symbol}")
     public ResponseEntity<Mono<BitrexMarketTickerResponse>> getBitrexMarket(@PathVariable("symbol") String marketSymbol) {
         //tUDSTDFI
         log.info("Received request to call bitrex client by market symbol {}", marketSymbol);
         return new ResponseEntity<>(arbitrageService.getBitrexMarketBySymbol(marketSymbol), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/markets")
+    @GetMapping(value = "/bitex/markets")
     public ResponseEntity<Flux<BitrexMarketResponse>> getAllMarkets() {
         log.info("Received request to call bitrex client and retrieve all markets");
         return new ResponseEntity<>(arbitrageService.getBitrexMartkets(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/defichain/markets")
+    public ResponseEntity<Flux<Object>> getDefiChainSwaps() {
+        log.info("Received request to call defichain client and retrieve all markets");
+        return new ResponseEntity<>(arbitrageService.getDefiChainSwapMarkets(), HttpStatus.OK);
     }
 
 
